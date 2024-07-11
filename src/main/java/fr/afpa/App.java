@@ -3,15 +3,13 @@ package fr.afpa;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -25,36 +23,48 @@ public class App extends Application {
     public void start(Stage stage) {
 
         stage.setScene(this.firstForm());
+        stage.setResizable(false);
         stage.show();
     }
 
     public Scene firstForm(){
+        // graphic vars
+        double spacing = 10.0;
+        String headerLiearGradient = "-fx-background-color: linear-gradient(to right,#165d82 20%, #0a79b3 50%, #165d82 80%)";
+        Integer padding = 40;
+
         // create panes
         VBox globalPane = new VBox();
         VBox header = new VBox();
         GridPane form = new GridPane();
-        form.setStyle("-fx-border-color: red");
+        form.setVgap(spacing);
+        form.setHgap(spacing);
+        form.setPadding(new Insets(padding, padding, padding, padding));
 
         // add GUI components to each pane
-        header.getChildren().add(new Label("Formulaire"));
-        
+        Label title = new Label("Formulaire");
+        header.getChildren().add(title);
+        header.setAlignment(Pos.CENTER);
+        header.setStyle(headerLiearGradient);
+        title.setStyle("-fx-font-weight: bold; -fx-text-fill: white;");
+        title.setPadding(new Insets(padding/3, padding/3, padding/3, padding/3));
+
         VBox btns = new VBox();
+        btns.setSpacing(spacing);
         Button delBtn = new Button("Effacer");
         Button exitBtn = new Button("Quitter");
         btns.getChildren().add(delBtn);
         btns.getChildren().add(exitBtn);
-
-        Label firstLabel = new Label("Entrée utilisateur");
         TextField firstField = new TextField();
         TextField secondField = new TextField();
         secondField.setDisable(true);
-        form.addRow(0, firstLabel, firstField, btns);
-        GridPane.setValignment(firstField, VPos.CENTER);
-        GridPane.setValignment(secondField, VPos.CENTER);
-        firstLabel.setStyle("-fx-border-color: blue");
 
+        // add components to the gridPane
+        form.addRow(0, new Label("Entrée de l'utilisateur"), firstField);
         form.addRow(1, new Label("Copie de l'entrée"), secondField);
-
+        form.add(btns, 2 , 0 ,1, 2);
+        btns.setAlignment(Pos.CENTER);
+        
         // copy 1st field content in 2nd field content on 1st field value change
         firstField.textProperty().addListener((event) -> secondField.setText(firstField.getText()));
 
